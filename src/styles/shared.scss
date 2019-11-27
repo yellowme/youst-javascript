@@ -2,3 +2,5 @@
  *  https://css-tricks.com/approaches-media-queries-sass/
  */
 @import "~include-media/dist/_include-media.scss";
+
+$breakpoints: (phone: 425px, tablet: 768px, desktop: 1024px);

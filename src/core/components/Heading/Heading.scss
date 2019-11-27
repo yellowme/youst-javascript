@@ -21,7 +21,7 @@
   }
 }
 
-@include media(">phone") {
+@include media(">=phone") {
   .Heading {
     font-size: 1.5rem;
 
