@@ -2,10 +2,10 @@ import "./FeatureItem.css";
 
 import React from "react";
 
-import Text from "../Text";
-import Heading from "../Heading";
-import Container from "../Container";
-import Spacer from "../Spacer";
+import Text from "../../../core/components/Text";
+import Heading from "../../../core/components/Heading";
+import Container from "../../../core/components/Container";
+import Spacer from "../../../core/components/Spacer";
 
 export default function FeatureItem({ title, legend, color }) {
   return (

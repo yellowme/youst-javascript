@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 
 import Dashboard from "../Dashboard";
-import FeaturesList from "../../core/components/FeaturesList";
-import Heading from "../../core/components/Heading";
-import Text from "../../core/components/Text";
+import FeaturesList from "../components/FeaturesList";
+import Title from "../components/Title";
+import Subtitle from "../components/Subtitle";
 
 test("renders without crashing", () => {
   const div = document.createElement("div");
@@ -15,10 +15,10 @@ test("renders without crashing", () => {
 
 test("display application titles", () => {
   const component = renderer.create(<Dashboard />);
-  const title = component.root.findAllByType(Heading)[0];
+  const title = component.root.findByType(Title);
   expect(title.props.children).toBe("Welcome to Youst!");
 
-  const subtitle = component.root.findAllByType(Text)[1];
+  const subtitle = component.root.findByType(Subtitle);
   expect(subtitle.props.children).toBe(
     "The player controls a yellow knight riding a flying ostrich or stork, from a third-person perspective."
   );
