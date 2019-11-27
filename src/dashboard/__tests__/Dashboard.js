@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 
 import Dashboard from "../Dashboard";
-import FeaturesList from "../components/FeaturesList";
-import Heading from "../components/Heading";
-import Text from "../components/Text";
+import FeaturesList from "../../core/components/FeaturesList";
+import Heading from "../../core/components/Heading";
+import Text from "../../core/components/Text";
 
 test("renders without crashing", () => {
   const div = document.createElement("div");

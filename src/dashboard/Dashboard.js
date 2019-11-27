@@ -1,16 +1,16 @@
 import React from "react";
 
-import Colors from "./colors";
+import Colors from "../core/colors";
+import Page from "../core/components/Page";
+import Center from "../core/components/Center";
+import Container from "../core/components/Container";
+import Circle from "../core/components/Circle";
+import FeaturesList from "../core/components/FeaturesList";
+import FeatureItem from "../core/components/FeatureItem";
+import Heading from "../core/components/Heading";
+import Text from "../core/components/Text";
 
-import Page from "./components/Page";
-import Center from './components/Center'
 import Layout from "./components/Layout";
-import Container from "./components/Container";
-import Circle from "./components/Circle";
-import FeaturesList from "./components/FeaturesList";
-import FeatureItem from "./components/FeatureItem";
-import Heading from "./components/Heading";
-import Text from "./components/Text";
 
 export default function Dashboard() {
   return (
