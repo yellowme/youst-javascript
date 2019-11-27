@@ -4,8 +4,8 @@ import renderer from "react-test-renderer";
 
 import Dashboard from "../Dashboard";
 import FeaturesList from "../components/FeaturesList";
-import Title from "../components/Title";
-import Subtitle from "../components/Subtitle";
+import Heading from "../components/Heading";
+import Text from "../components/Text";
 
 test("renders without crashing", () => {
   const div = document.createElement("div");
@@ -15,10 +15,10 @@ test("renders without crashing", () => {
 
 test("display application titles", () => {
   const component = renderer.create(<Dashboard />);
-  const title = component.root.findByType(Title);
+  const title = component.root.findAllByType(Heading)[0];
   expect(title.props.children).toBe("Welcome to Youst!");
 
-  const subtitle = component.root.findByType(Subtitle);
+  const subtitle = component.root.findAllByType(Text)[1];
   expect(subtitle.props.children).toBe(
     "The player controls a yellow knight riding a flying ostrich or stork, from a third-person perspective."
   );
@@ -33,14 +33,15 @@ test("dashboard have 3 main sections", () => {
   const component = renderer.create(<Dashboard />);
 
   const featuresList = component.root.findByType(FeaturesList);
-  expect(featuresList.children.length).toBe(3);
+  expect(featuresList.props.children.length).toBe(3);
 
-  const featureChallenges = featuresList.children[0];
+  const [
+    featureChallenges,
+    featurePlaygrounds,
+    featureMiniApps
+  ] = featuresList.props.children;
+
   expect(featureChallenges.props.title).toBe("Challenges");
-
-  const featurePlaygrounds = featuresList.children[1];
   expect(featurePlaygrounds.props.title).toBe("Playground");
-
-  const featureMiniApps = featuresList.children[2];
   expect(featureMiniApps.props.title).toBe("Mini Apps");
 });
