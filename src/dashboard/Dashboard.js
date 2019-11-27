@@ -23,7 +23,7 @@ export default function Dashboard() {
                 <Circle color={Colors.YELLOWME} />
               </Container>
               <Container margin="20px 0px 0px">
-                <Heading>Welcome to Youst!</Heading>
+                <Heading as="h5">Welcome to Youst!</Heading>
               </Container>
               <Container margin="20px 0px 0px">
                 <Text>
