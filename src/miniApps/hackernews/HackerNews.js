@@ -1,32 +1,33 @@
 import React from "react";
-import { Helmet } from "react-helmet";
-import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
-const httpLink = createHttpLink({
-  uri: "https://api.graph.cool/simple/v1/ck3jdh5305isu0175jjcs3ssf"
-});
+import LinkList from "./components/LinkList";
+import Link from "./components/Link";
 
-const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
-});
+export const ALL_LINKS_QUERY = gql`
+  {
+    allLinks {
+      id
+      description
+      url
+    }
+  }
+`;
 
 export default function HackerNews() {
+  const { loading, error, data } = useQuery(ALL_LINKS_QUERY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error!</p>;
+
   return (
     <>
-      <Helmet>
-        <title>HackerNews</title>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"
-        />
-      </Helmet>
-      <ApolloProvider client={client}>
-        <div />
-      </ApolloProvider>
+      <LinkList>
+        {data.allLinks.map(link => (
+          <Link key={link.id} description={link.description} />
+        ))}
+      </LinkList>
     </>
   );
 }

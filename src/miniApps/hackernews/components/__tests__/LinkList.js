@@ -15,9 +15,7 @@ test("renders without crashing", () => {
     </LinkList>
   );
 
-  const root = component.root;
+  const tree = component.toJSON();
 
-  const list = root.findByType(LinkList);
-  const itemsInList = list.children[0].children;
-  expect(itemsInList.length).toBe(2);
+  expect(tree.children.length).toBe(2);
 });
