@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@loadable/component": "^5.10.3",
     "apollo-boost": "^0.4.4",
     "classnames": "^2.2.6",
     "faker": "^4.1.0",
+    "formik": "^2.0.6",
     "graphql": "^14.5.8",
     "include-media": "^1.4.9",
     "node-sass": "^4.13.0",
