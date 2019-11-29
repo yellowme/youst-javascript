@@ -1,18 +1,19 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Dashboard from "./dashboard";
-import HackerNews from "./miniApps/hackernews";
+
+const LazyHackerNews = lazy(() => import("./miniApps/hackernews"));
 
 export default function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact>
-          <Dashboard />
-        </Route>
+        <Route path="/" exact component={Dashboard} />
         <Route path="/mini-apps/hacker-news">
-          <HackerNews />
+          <Suspense fallback={<div>Loading...</div>}>
+            <LazyHackerNews />
+          </Suspense>
         </Route>
       </Switch>
     </Router>
