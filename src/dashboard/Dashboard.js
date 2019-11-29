@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import Colors from "../core/colors";
 
@@ -30,6 +31,7 @@ export default function Dashboard() {
           legend="Proofs of concept"
         />
         <FeatureItem
+          to="/mini-apps/hacker-news"
           color={Colors.JOUST_BLUE}
           title="Mini Apps"
           legend="Let's clone that app"
