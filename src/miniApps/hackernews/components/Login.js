@@ -3,7 +3,7 @@ import { useMutation } from "react-apollo";
 import { useFormik } from "formik";
 import gql from "graphql-tag";
 
-import { AUTH_TOKEN, USER_ID } from "../constants";
+import { MINI_APP_BASE_ROUTE, AUTH_TOKEN, USER_ID } from "../constants";
 
 export default function Login({ history }) {
   const [displayLoginForm, setDisplayForm] = useState(true);
@@ -52,7 +52,7 @@ export default function Login({ history }) {
     const { token, user } = data.signinUser;
     localStorage.setItem(AUTH_TOKEN, token);
     localStorage.setItem(USER_ID, user.id);
-    history.push("/mini-apps/hacker-news");
+    history.push(MINI_APP_BASE_ROUTE);
   }
 
   return (

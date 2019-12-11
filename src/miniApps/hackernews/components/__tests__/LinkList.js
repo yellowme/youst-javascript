@@ -7,17 +7,25 @@ import wait from "waait";
 
 import createLink from "../../jest/factories/link";
 import createVote from "../../jest/factories/votes";
-
 import LinkList from "../LinkList";
 import Link from "../Link";
+import { MINI_APP_BASE_ROUTE } from "../../constants";
 import { ALL_LINKS_QUERY } from "../../hooks/useAllLinksQuery";
 
 function TestLinkList({ mocks = [] }) {
   return (
     <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter>
-        <Route exact path="/" render={() => <Redirect to="/new/1" />} />
-        <Route exact path="/new/:page" component={LinkList} />
+      <MemoryRouter initialEntries={[MINI_APP_BASE_ROUTE]}>
+        <Route
+          exact
+          path={MINI_APP_BASE_ROUTE}
+          render={() => <Redirect to={`${MINI_APP_BASE_ROUTE}/new/1`} />}
+        />
+        <Route
+          exact
+          path={`${MINI_APP_BASE_ROUTE}/new/:page`}
+          component={LinkList}
+        />
       </MemoryRouter>
     </MockedProvider>
   );
@@ -102,8 +110,8 @@ test("renders top links", async () => {
 
   const component = renderer.create(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={['/top']}>
-        <Route exact path="/top" component={LinkList} />
+      <MemoryRouter initialEntries={[`${MINI_APP_BASE_ROUTE}/top`]}>
+        <Route exact path={`${MINI_APP_BASE_ROUTE}/top`} component={LinkList} />
       </MemoryRouter>
     </MockedProvider>
   );
