@@ -24,14 +24,14 @@ export default function Link({
           ▲
         </div>
       </div>
-      <div className="ml1">
+      <div className="ml1 break-word ">
         <Text>
           {description} ({url})
         </Text>
-        <div className="f6 lh-copy gray">
+        <Text className="f6 lh-copy gray">
           {votes} votes | by {postedBy ? postedBy.name : "Unknown"}{" "}
           {timeDifferenceForDate(createdAt)}
-        </div>
+        </Text>
       </div>
     </div>
   );
