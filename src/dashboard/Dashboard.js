@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import Colors from "../core/colors";
 
@@ -21,11 +20,13 @@ export default function Dashboard() {
       </Subtitle>
       <FeaturesList>
         <FeatureItem
+          to="/mini-apps/hacker-news"
           color={Colors.PINK_GLAMOUR}
           title="Challenges"
           legend="Interview puzzlers"
         />
         <FeatureItem
+          to="/mini-apps/hacker-news"
           color={Colors.MINT_LEAF}
           title="Playground"
           legend="Proofs of concept"
