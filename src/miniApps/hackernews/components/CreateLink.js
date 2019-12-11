@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 
+import { MINI_APP_BASE_ROUTE } from "../constants";
 import useCreateLinkMutation from "../hooks/useCreateLinkMutation";
 
 export default function CreateLink({ history }) {
@@ -15,7 +16,7 @@ export default function CreateLink({ history }) {
 
   async function handleSubmitForm(data) {
     await createLink(data);
-    history.push("/");
+    history.push(MINI_APP_BASE_ROUTE);
     return;
   }
 

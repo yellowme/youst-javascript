@@ -1,19 +1,16 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { ApolloProvider } from "react-apollo";
-import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import { client } from "./apollo";
-
+import { MINI_APP_BASE_ROUTE } from "./constants";
 import LinkList from "./components/LinkList";
 import CreateLink from "./components/CreateLink";
 import Header from "./components/Header";
 import Login from "./components/Login";
-import Search from "./components/Search";
 
 export default function HackerNews() {
-  const { path } = useRouteMatch();
-
   return (
     <>
       <Helmet>
@@ -30,14 +27,13 @@ export default function HackerNews() {
             <Switch>
               <Route
                 exact
-                path={path}
-                render={() => <Redirect to={`${path}/new/1`} />}
+                path={MINI_APP_BASE_ROUTE}
+                render={() => <Redirect to={`${MINI_APP_BASE_ROUTE}/new/1`} />}
               />
-              <Route exact path={`${path}/login`} component={Login} />
-              <Route exact path={`${path}/search`} component={Search} />
-              <Route exact path={`${path}/create`} component={CreateLink} />
-              <Route exact path={`${path}/top`} component={LinkList} />
-              <Route exact path={`${path}/new/:page`} component={LinkList} />
+              <Route exact path={`${MINI_APP_BASE_ROUTE}/login`} component={Login} />
+              <Route exact path={`${MINI_APP_BASE_ROUTE}/create`} component={CreateLink} />
+              <Route exact path={`${MINI_APP_BASE_ROUTE}/top`} component={LinkList} />
+              <Route exact path={`${MINI_APP_BASE_ROUTE}/new/:page`} component={LinkList} />
             </Switch>
           </div>
         </div>

@@ -3,22 +3,35 @@ import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import { MockedProvider } from "@apollo/react-testing";
 import { MemoryRouter, Redirect, Route } from "react-router-dom";
-import wait from 'waait';
+import wait from "waait";
 
 import createLink from "../../jest/factories/link";
 import CreateLink from "../CreateLink";
 import LinkList from "../LinkList";
 import Link from "../Link";
+import { MINI_APP_BASE_ROUTE } from "../../constants";
 import { ALL_LINKS_QUERY } from "../../hooks/useAllLinksQuery";
 import { CREATE_LINK_MUTATION } from "../../hooks/useCreateLinkMutation";
 
 function TestCreateLink({ mocks }) {
   return (
     <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={['/create']}>
-        <Route exact path="/" render={() => <Redirect to="/new/1" />} />
-        <Route exact path="/new/:page" component={LinkList} />
-        <Route exact path="/create" component={CreateLink} />
+      <MemoryRouter initialEntries={[`${MINI_APP_BASE_ROUTE}/create`]}>
+        <Route
+          exact
+          path={MINI_APP_BASE_ROUTE}
+          render={() => <Redirect to={`${MINI_APP_BASE_ROUTE}/new/1`} />}
+        />
+        <Route
+          exact
+          path={`${MINI_APP_BASE_ROUTE}/new/:page`}
+          component={LinkList}
+        />
+        <Route
+          exact
+          path={`${MINI_APP_BASE_ROUTE}/create`}
+          component={CreateLink}
+        />
       </MemoryRouter>
     </MockedProvider>
   );
@@ -66,9 +79,7 @@ test("creates a new link with createLink xmutation", async () => {
     }
   ];
 
-  let component = renderer.create(
-    <TestCreateLink mocks={mocks} />
-  );
+  let component = renderer.create(<TestCreateLink mocks={mocks} />);
 
   const root = component.root;
 

@@ -1,12 +1,12 @@
 import React from "react";
 
-import { LINKS_PER_PAGE } from "../constants";
+import { MINI_APP_BASE_ROUTE, LINKS_PER_PAGE } from "../constants";
 import Link from "./Link";
 import useAllLinksQuery from "../hooks/useAllLinksQuery";
 import useCreateVoteMutation from "../hooks/useCreateVoteMutation";
 
 export default function LinkList({ location, match, history }) {
-  const isNewPage = location.pathname.includes("new");
+  const isNewPage = location.pathname.includes("/new");
   const page = parseInt(match.params.page, 10);
 
   const [allLinks, loading, error] = useAllLinksQuery({ isNewPage, page });
@@ -25,14 +25,14 @@ export default function LinkList({ location, match, history }) {
   function goToPreviousPage() {
     if (page > 1) {
       const previousPage = page - 1;
-      history.push(`/new/${previousPage}`);
+      history.push(`${MINI_APP_BASE_ROUTE}/new/${previousPage}`);
     }
   }
 
   function goToNextPage() {
     if (page <= allLinks.length / LINKS_PER_PAGE) {
       const nextPage = page + 1;
-      history.push(`/new/${nextPage}`);
+      history.push(`${MINI_APP_BASE_ROUTE}/new/${nextPage}`);
     }
   }
 
