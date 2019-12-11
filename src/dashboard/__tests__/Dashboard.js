@@ -1,20 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
+import { MemoryRouter } from "react-router-dom";
 
 import Dashboard from "../Dashboard";
 import FeaturesList from "../components/FeaturesList";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
 
+function TestDashboardComponent() {
+  return (
+    <MemoryRouter>
+      <Dashboard />
+    </MemoryRouter>
+  );
+}
+
 test("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<Dashboard />, div);
+  ReactDOM.render(<TestDashboardComponent />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 
 test("display application titles", () => {
-  const component = renderer.create(<Dashboard />);
+  const component = renderer.create(<TestDashboardComponent />);
   const title = component.root.findByType(Title);
   expect(title.props.children).toBe("Welcome to Youst!");
 
@@ -30,7 +39,7 @@ test("dashboard have 3 main sections", () => {
   // - Playgrounds
   // - Mini Apps
   // But the list component should work as a _Compound Component_
-  const component = renderer.create(<Dashboard />);
+  const component = renderer.create(<TestDashboardComponent />);
 
   const featuresList = component.root.findByType(FeaturesList);
   expect(featuresList.props.children.length).toBe(3);

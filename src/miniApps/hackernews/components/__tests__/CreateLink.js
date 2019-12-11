@@ -2,56 +2,99 @@ import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import { MockedProvider } from "@apollo/react-testing";
-import faker from "faker";
+import { MemoryRouter, Redirect, Route } from "react-router-dom";
+import wait from 'waait';
 
-import CreateLink, { CREATE_LINK_MUTATION } from "../CreateLink";
+import createLink from "../../jest/factories/link";
+import CreateLink from "../CreateLink";
+import LinkList from "../LinkList";
+import Link from "../Link";
+import { ALL_LINKS_QUERY } from "../../hooks/useAllLinksQuery";
+import { CREATE_LINK_MUTATION } from "../../hooks/useCreateLinkMutation";
 
-function createLinkList(mocks) {
+function TestCreateLink({ mocks }) {
   return (
     <MockedProvider mocks={mocks} addTypename={false}>
-      <CreateLink />
+      <MemoryRouter initialEntries={['/create']}>
+        <Route exact path="/" render={() => <Redirect to="/new/1" />} />
+        <Route exact path="/new/:page" component={LinkList} />
+        <Route exact path="/create" component={CreateLink} />
+      </MemoryRouter>
     </MockedProvider>
   );
 }
 
 test("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(createLinkList(), div);
+  ReactDOM.render(<TestCreateLink />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 
-test("creates a new link with createLink mutation", async () => {
-  const createLinkResult = {
-    id: faker.random.uuid(),
-    description: faker.lorem.words(),
-    url: faker.internet.url()
-  };
+test("creates a new link with createLink xmutation", async () => {
+  const newLink = createLink();
+  const allLinks = [createLink(), newLink];
 
   const mocks = [
     {
       request: {
         query: CREATE_LINK_MUTATION,
         variables: {
-          description: createLinkResult.description,
-          url: createLinkResult.url
+          description: newLink.description,
+          url: newLink.url
         }
       },
       result: {
         data: {
-          createLink: createLinkResult
+          createLink: newLink
+        }
+      }
+    },
+    {
+      request: {
+        query: ALL_LINKS_QUERY,
+        variables: {
+          first: 5,
+          skip: 0,
+          orderBy: "createdAt_DESC"
+        }
+      },
+      result: {
+        data: {
+          allLinks
         }
       }
     }
   ];
 
-  const component = renderer.create(createLinkList(mocks));
+  let component = renderer.create(
+    <TestCreateLink mocks={mocks} />
+  );
 
-  // find the button and simulate a click
-  const button = component.root.findByType("button");
+  const root = component.root;
+
+  // find input fileds
+  const form = component.root.findByType("form");
+  const descriptionInput = component.root.findByProps({ name: "description" });
+  const urlInput = component.root.findByProps({ name: "url" });
+
   await renderer.act(async () => {
-    await button.props.onClick(); // fires the mutation
+    await descriptionInput.props.onChange({
+      target: { name: "description", value: newLink.description }
+    });
+
+    await urlInput.props.onChange({
+      target: { name: "url", value: newLink.url }
+    });
+
+    await form.props.onSubmit();
   });
 
-  const tree = component.toJSON();
-  expect(tree.children).toContain("Loading...");
+  component.update(<TestCreateLink mocks={mocks} />);
+
+  await renderer.act(async () => {
+    await wait(0); // Wait to LinkList query resolves
+  });
+
+  const links = root.findAllByType(Link);
+  expect(links.length).toBe(allLinks.length);
 });

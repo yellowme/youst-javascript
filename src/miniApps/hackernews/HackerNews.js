@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { ApolloProvider } from "react-apollo";
 import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
 
-import { client } from "./index";
+import { client } from "./apollo";
 
 import LinkList from "./components/LinkList";
 import CreateLink from "./components/CreateLink";
