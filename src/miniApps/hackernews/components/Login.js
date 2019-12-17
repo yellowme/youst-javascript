@@ -3,9 +3,11 @@ import { useMutation } from "react-apollo";
 import { useFormik } from "formik";
 import gql from "graphql-tag";
 
-import { MINI_APP_BASE_ROUTE, AUTH_TOKEN, USER_ID } from "../constants";
+import { MINI_APP_BASE_ROUTE } from "../constants";
+import useAuthenticatedUser from "../hooks/useUser";
 
 export default function Login({ history }) {
+  const { login } = useAuthenticatedUser();
   const [displayLoginForm, setDisplayForm] = useState(true);
   const [createUserMutation] = useMutation(CREATE_USER_MUTATION);
   const [signinUserMutation] = useMutation(SIGNIN_USER_MUTATION);
@@ -49,9 +51,8 @@ export default function Login({ history }) {
     });
 
     if (errors) throw errors;
-    const { token, user } = data.signinUser;
-    localStorage.setItem(AUTH_TOKEN, token);
-    localStorage.setItem(USER_ID, user.id);
+    const { token: authToken, user } = data.signinUser;
+    login({ authToken, userId: user.id });
     history.push(MINI_APP_BASE_ROUTE);
   }
 
