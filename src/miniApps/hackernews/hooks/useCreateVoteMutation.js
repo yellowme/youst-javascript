@@ -1,16 +1,16 @@
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
-import { LINKS_PER_PAGE, AUTH_TOKEN, USER_ID } from "../constants";
+import { LINKS_PER_PAGE } from "../constants";
 import { ALL_LINKS_QUERY } from "./useAllLinksQuery";
+import useAuthenticatedUser from "./useUser";
 
 export default function useCreateVoteMutation({ isNewPage, page }) {
+  const { authToken, userId } = useAuthenticatedUser();
   const [mutate] = useMutation(CREATE_VOTE_MUTATION);
 
   function createVote(linkId) {
-    const hasToken = localStorage.getItem(AUTH_TOKEN);
-    const userId = localStorage.getItem(USER_ID);
-    if (!hasToken) throw new Error();
+    if (!authToken) throw new Error();
 
     return mutate({
       mutation: CREATE_VOTE_MUTATION,

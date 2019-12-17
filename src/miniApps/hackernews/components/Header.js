@@ -1,15 +1,15 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import { AUTH_TOKEN, MINI_APP_BASE_ROUTE } from "../constants";
+import { MINI_APP_BASE_ROUTE } from "../constants";
+import useAuthenticatedUser from "../hooks/useUser";
 
 export default function Header() {
   const history = useHistory();
-
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const { authToken, logout } = useAuthenticatedUser();
 
   function handleLogout() {
-    localStorage.removeItem(AUTH_TOKEN);
+    logout();
     history.push(MINI_APP_BASE_ROUTE);
   }
 
@@ -21,13 +21,19 @@ export default function Header() {
           new
         </Link>
         <div className="ml1">|</div>
-        <Link to={`${MINI_APP_BASE_ROUTE}/top`} className="ml1 no-underline black">
+        <Link
+          to={`${MINI_APP_BASE_ROUTE}/top`}
+          className="ml1 no-underline black"
+        >
           top
         </Link>
         {authToken && (
           <div className="flex">
             <div className="ml1">|</div>
-            <Link to={`${MINI_APP_BASE_ROUTE}/create`} className="ml1 no-underline black">
+            <Link
+              to={`${MINI_APP_BASE_ROUTE}/create`}
+              className="ml1 no-underline black"
+            >
               submit
             </Link>
           </div>
@@ -39,7 +45,10 @@ export default function Header() {
             logout
           </div>
         ) : (
-          <Link to={`${MINI_APP_BASE_ROUTE}/login`} className="ml1 no-underline black">
+          <Link
+            to={`${MINI_APP_BASE_ROUTE}/login`}
+            className="ml1 no-underline black"
+          >
             login
           </Link>
         )}
