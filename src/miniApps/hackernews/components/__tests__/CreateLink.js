@@ -43,7 +43,7 @@ test("renders without crashing", () => {
   ReactDOM.unmountComponentAtNode(div);
 });
 
-test("creates a new link with createLink xmutation", async () => {
+test("creates a new link with createLink mutation", async () => {
   const newLink = createLink();
   const allLinks = [createLink(), newLink];
 

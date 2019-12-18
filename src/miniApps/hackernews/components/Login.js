@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { useMutation } from "react-apollo";
 import { useFormik } from "formik";
-import gql from "graphql-tag";
 
 import { MINI_APP_BASE_ROUTE } from "../constants";
 import useAuthenticatedUser from "../hooks/useUser";
+import useSigninUserMutation from "../hooks/useSigninUserMutation";
+import useCreateUserMutation from "../hooks/useCreateUserMutation";
 
 export default function Login({ history }) {
   const { login } = useAuthenticatedUser();
+  const createUser = useCreateUserMutation();
+  const signinUser = useSigninUserMutation();
   const [displayLoginForm, setDisplayForm] = useState(true);
-  const [createUserMutation] = useMutation(CREATE_USER_MUTATION);
-  const [signinUserMutation] = useMutation(SIGNIN_USER_MUTATION);
 
   const formik = useFormik({
     initialValues: {
@@ -18,42 +18,37 @@ export default function Login({ history }) {
       password: "",
       name: ""
     },
-    onSubmit: displayLoginForm
-      ? handleSigninUserMutation
-      : handleCreateUserMutation
+    onSubmit: handleSubmit
   });
 
-  async function handleCreateUserMutation(variables) {
-    const { errors } = await createUserMutation({
-      variables: {
-        name: variables.name,
-        authProvider: {
-          email: {
-            email: variables.email,
-            password: variables.password
-          }
-        }
+  async function handleSubmit(variables) {
+    try {
+      if (!displayLoginForm) {
+        await handleCreateUserMutation(variables);
       }
-    });
 
-    if (errors) throw errors;
-    return handleSigninUserMutation(variables);
+      const { data } = await handleSigninUserMutation(variables);
+      const { token: authToken, user } = data.signinUser;
+      login({ authToken, userId: user.id });
+      history.push(MINI_APP_BASE_ROUTE);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  async function handleSigninUserMutation(variables) {
-    const { data, errors } = await signinUserMutation({
-      variables: {
-        email: {
-          email: variables.email,
-          password: variables.password
-        }
-      }
+  function handleCreateUserMutation(variables) {
+    return createUser({
+      name: variables.name,
+      email: variables.email,
+      password: variables.password
     });
+  }
 
-    if (errors) throw errors;
-    const { token: authToken, user } = data.signinUser;
-    login({ authToken, userId: user.id });
-    history.push(MINI_APP_BASE_ROUTE);
+  function handleSigninUserMutation(variables) {
+    return signinUser({
+      email: variables.email,
+      password: variables.password
+    });
   }
 
   return (
@@ -100,25 +95,3 @@ export default function Login({ history }) {
     </form>
   );
 }
-
-const CREATE_USER_MUTATION = gql`
-  mutation CreateUserMutation(
-    $name: String!
-    $authProvider: AuthProviderSignupData!
-  ) {
-    createUser(name: $name, authProvider: $authProvider) {
-      id
-    }
-  }
-`;
-
-const SIGNIN_USER_MUTATION = gql`
-  mutation SigninUserMutation($email: AUTH_PROVIDER_EMAIL) {
-    signinUser(email: $email) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
