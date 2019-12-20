@@ -148,9 +148,8 @@ test("signup and login", async () => {
     await wait(0); // Wait to LinkList query resolves
   });
 
-  // FIXME:
-  // const links = component.root.findAllByType(Link);
-  // expect(links.length).toBe(allLinks.length);
+  const links = component.root.findAllByType(Link);
+  expect(links.length).toBe(allLinks.length);
 });
 
 function createInputEvent({ name, value }) {
