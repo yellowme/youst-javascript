@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import { MockedProvider } from "@apollo/react-testing";
 import { MemoryRouter, Redirect, Route } from "react-router-dom";
@@ -37,12 +36,6 @@ function TestCreateLink({ mocks }) {
   );
 }
 
-test("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<TestCreateLink />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
 test("creates a new link with createLink mutation", async () => {
   const newLink = createLink();
   const allLinks = [createLink(), newLink];
@@ -79,33 +72,39 @@ test("creates a new link with createLink mutation", async () => {
     }
   ];
 
-  let component = renderer.create(<TestCreateLink mocks={mocks} />);
-
-  const root = component.root;
+  const component = renderer.create(<TestCreateLink mocks={mocks} />);
 
   // find input fileds
   const form = component.root.findByType("form");
   const descriptionInput = component.root.findByProps({ name: "description" });
   const urlInput = component.root.findByProps({ name: "url" });
 
+  // Fill form
   await renderer.act(async () => {
-    await descriptionInput.props.onChange({
-      target: { name: "description", value: newLink.description }
-    });
+    descriptionInput.props.onChange(
+      createInputEvent({ name: "description", value: newLink.description })
+    );
 
-    await urlInput.props.onChange({
-      target: { name: "url", value: newLink.url }
-    });
+    urlInput.props.onChange(
+      createInputEvent({ name: "url", value: newLink.url })
+    );
 
     await form.props.onSubmit();
   });
-
-  component.update(<TestCreateLink mocks={mocks} />);
 
   await renderer.act(async () => {
     await wait(0); // Wait to LinkList query resolves
   });
 
-  const links = root.findAllByType(Link);
+  const links = component.root.findAllByType(Link);
   expect(links.length).toBe(allLinks.length);
+
+  const createdLink = links.find(l => l.props.id === newLink.id);
+  expect(createdLink.props.description).toBe(newLink.description);
 });
+
+function createInputEvent({ name, value }) {
+  return {
+    target: { name, value }
+  };
+}
