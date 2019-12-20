@@ -1,6 +1,5 @@
 import { MemoryRouter, Route, Redirect } from "react-router-dom";
 import { MockedProvider } from "@apollo/react-testing";
-import { render, fireEvent, waitForElement } from "@testing-library/react";
 import React from "react";
 import renderer from "react-test-renderer";
 import wait from "waait";
