@@ -7,15 +7,15 @@ const LazyHackerNews = lazy(() => import("./miniApps/hackernews"));
 
 export default function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact component={Dashboard} />
-        <Route path="/mini-apps/hacker-news">
-          <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Dashboard} />
+          <Route path="/mini-apps/hacker-news">
             <LazyHackerNews />
-          </Suspense>
-        </Route>
-      </Switch>
-    </Router>
+          </Route>
+        </Switch>
+      </Router>
+    </Suspense>
   );
 }

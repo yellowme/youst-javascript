@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 
 import { LINKS_PER_PAGE } from "../constants";
 import { ALL_LINKS_QUERY } from "./useAllLinksQuery";
-import useAuthenticatedUser from "./useUser";
+import useAuthenticatedUser from "./useAuthenticatedUser";
 
 export default function useCreateVoteMutation({ isNewPage, page }) {
   const { authToken, userId } = useAuthenticatedUser();

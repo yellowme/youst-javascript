@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 
 import { MINI_APP_BASE_ROUTE } from "../constants";
-import useAuthenticatedUser from "../hooks/useUser";
+import useAuthenticatedUser from "../hooks/useAuthenticatedUser";
 import useSigninUserMutation from "../hooks/useSigninUserMutation";
 import useCreateUserMutation from "../hooks/useCreateUserMutation";
 
@@ -23,16 +23,14 @@ export default function Login({ history }) {
 
   async function handleSubmit(variables) {
     try {
-      if (!displayLoginForm) {
-        await handleCreateUserMutation(variables);
-      }
-
+      if (!displayLoginForm) await handleCreateUserMutation(variables);
       const { data } = await handleSigninUserMutation(variables);
       const { token: authToken, user } = data.signinUser;
       login({ authToken, userId: user.id });
       history.push(MINI_APP_BASE_ROUTE);
+      return;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

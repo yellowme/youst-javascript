@@ -1,26 +1,28 @@
 import { MemoryRouter, Route, Redirect } from "react-router-dom";
 import { MockedProvider } from "@apollo/react-testing";
+import { render, fireEvent, waitForElement } from "@testing-library/react";
 import React from "react";
-import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import wait from "waait";
 
+import { ALL_LINKS_QUERY } from "../../hooks/useAllLinksQuery";
+import { MINI_APP_BASE_ROUTE, LINKS_PER_PAGE } from "../../constants";
+import createList from "../../jest/createList";
 import createLink from "../../jest/factories/link";
 import createVote from "../../jest/factories/votes";
-import LinkList from "../LinkList";
 import Link from "../Link";
-import { MINI_APP_BASE_ROUTE } from "../../constants";
-import { ALL_LINKS_QUERY } from "../../hooks/useAllLinksQuery";
+import LinkList from "../LinkList";
 
-function TestLinkList({ mocks = [] }) {
+function TestLinkList({ initialEntries = [MINI_APP_BASE_ROUTE], mocks = [] }) {
   return (
     <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={[MINI_APP_BASE_ROUTE]}>
+      <MemoryRouter initialEntries={initialEntries}>
         <Route
           exact
           path={MINI_APP_BASE_ROUTE}
           render={() => <Redirect to={`${MINI_APP_BASE_ROUTE}/new/1`} />}
         />
+        <Route exact path={`${MINI_APP_BASE_ROUTE}/top`} component={LinkList} />
         <Route
           exact
           path={`${MINI_APP_BASE_ROUTE}/new/:page`}
@@ -31,13 +33,7 @@ function TestLinkList({ mocks = [] }) {
   );
 }
 
-test("renders without crashing", async () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<TestLinkList />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
-test("renders linklist", async () => {
+test("renders link list", async () => {
   const allLinks = [createLink(), createLink()];
 
   const mocks = [
@@ -45,7 +41,7 @@ test("renders linklist", async () => {
       request: {
         query: ALL_LINKS_QUERY,
         variables: {
-          first: 5,
+          first: LINKS_PER_PAGE,
           skip: 0,
           orderBy: "createdAt_DESC"
         }
@@ -59,9 +55,9 @@ test("renders linklist", async () => {
   ];
 
   const component = renderer.create(<TestLinkList mocks={mocks} />);
-  const root = component.root;
-  let tree = component.toJSON();
 
+  let tree = component.toJSON();
+  // Loading after query response it renders a loading state
   expect(tree.children).toContain("Loading...");
 
   // When the query resolves it sets an state in the
@@ -70,21 +66,22 @@ test("renders linklist", async () => {
   // and for our test we should capture that side effect
   await renderer.act(async () => {
     await wait(0); // wait for response
-    tree = component.toJSON(); // refresh tree instance
   });
 
-  const links = root.findAllByType(Link);
+  const links = component.root.findAllByType(Link);
   expect(links.length).toBe(2);
 
-  expect(links[0].props.id).toBe(allLinks[0].id);
-  expect(links[1].props.id).toBe(allLinks[1].id);
+  for (let i = 0; i < links.length; i++) {
+    expect(links[i].props.id).toBe(allLinks[i].id);
+  }
 });
 
 test("renders top links", async () => {
-  const allLinks = Array.from({ length: 100 }).map(createLink);
+  // 100 defaults when request top links
+  const allLinks = createList(100, createLink);
 
   // Adds and deletes one vote for 2 diferent links
-  // Validate sort function
+  // to validate sort function
   // The Link with most votes should be the first
   // And the Link with less votes should be the last
   allLinks[0].votes.push(createVote());
@@ -109,28 +106,17 @@ test("renders top links", async () => {
   ];
 
   const component = renderer.create(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={[`${MINI_APP_BASE_ROUTE}/top`]}>
-        <Route exact path={`${MINI_APP_BASE_ROUTE}/top`} component={LinkList} />
-      </MemoryRouter>
-    </MockedProvider>
+    <TestLinkList
+      initialEntries={[`${MINI_APP_BASE_ROUTE}/top`]}
+      mocks={mocks}
+    />
   );
 
-  const root = component.root;
-  let tree = component.toJSON();
-
-  expect(tree.children).toContain("Loading...");
-
-  // When the query resolves it sets an state in the
-  // apollo provider with the fetched information
-  // for our component it will behave as a side-effect
-  // and for our test we should capture that side effect
   await renderer.act(async () => {
     await wait(0); // wait for response
-    tree = component.toJSON(); // refresh tree instance
   });
 
-  const links = root.findAllByType(Link);
+  const links = component.root.findAllByType(Link);
   expect(links.length).toBe(100);
 
   expect(links[0].props.id).toBe(allLinks[0].id);
@@ -138,22 +124,22 @@ test("renders top links", async () => {
 });
 
 test("navigates to next page and to previous page", async () => {
-  const initialAllLinks = Array.from({ length: 5 }).map(createLink);
-  const lastAllLinks = Array.from({ length: 5 }).map(createLink);
+  const firstPageAllLinks = createList(LINKS_PER_PAGE, createLink);
+  const secondPageAllLinks = createList(LINKS_PER_PAGE, createLink);
 
   const mocks = [
     {
       request: {
         query: ALL_LINKS_QUERY,
         variables: {
-          first: 5,
+          first: LINKS_PER_PAGE,
           skip: 0,
           orderBy: "createdAt_DESC"
         }
       },
       result: {
         data: {
-          allLinks: initialAllLinks
+          allLinks: firstPageAllLinks
         }
       }
     },
@@ -161,59 +147,50 @@ test("navigates to next page and to previous page", async () => {
       request: {
         query: ALL_LINKS_QUERY,
         variables: {
-          first: 5,
-          skip: 5,
+          first: LINKS_PER_PAGE,
+          skip: LINKS_PER_PAGE,
           orderBy: "createdAt_DESC"
         }
       },
       result: {
         data: {
-          allLinks: lastAllLinks
+          allLinks: secondPageAllLinks
         }
       }
     }
   ];
 
   const component = renderer.create(<TestLinkList mocks={mocks} />);
-  const root = component.root;
-  let tree = component.toJSON();
 
-  expect(tree.children).toContain("Loading...");
-
-  // When the query resolves it sets an state in the
-  // apollo provider with the fetched information
-  // for our component it will behave as a side-effect
-  // and for our test we should capture that side effect
   await renderer.act(async () => {
     await wait(0); // wait for response
-    tree = component.toJSON(); // refresh tree instance
   });
 
-  let links = root.findAllByType(Link);
+  let links = component.root.findAllByType(Link);
   expect(links.length).toBe(5);
-  expect(links[0].props.id).toBe(initialAllLinks[0].id);
+  expect(links[0].props.id).toBe(firstPageAllLinks[0].id);
 
   // Navigates to next 5
-  const nextPageButton = root.findByProps({ className: "pointer" });
+  const nextPageButton = component.root.findByProps({ className: "pointer" });
 
   await renderer.act(async () => {
     await nextPageButton.props.onClick(); // wait for response
-    tree = component.toJSON(); // refresh tree instance
   });
 
-  links = root.findAllByType(Link);
+  links = component.root.findAllByType(Link);
   expect(links.length).toBe(5);
-  expect(links[0].props.id).toBe(lastAllLinks[0].id);
+  expect(links[0].props.id).toBe(secondPageAllLinks[0].id);
 
   // Go back to previous page
-  const previousPageButton = root.findByProps({ className: "pointer mr2" });
+  const previousPageButton = component.root.findByProps({
+    className: "pointer mr2"
+  });
 
   await renderer.act(async () => {
     await previousPageButton.props.onClick(); // wait for response
-    tree = component.toJSON(); // refresh tree instance
   });
 
-  links = root.findAllByType(Link);
+  links = component.root.findAllByType(Link);
   expect(links.length).toBe(5);
-  expect(links[0].props.id).toBe(initialAllLinks[0].id);
+  expect(links[0].props.id).toBe(firstPageAllLinks[0].id);
 });

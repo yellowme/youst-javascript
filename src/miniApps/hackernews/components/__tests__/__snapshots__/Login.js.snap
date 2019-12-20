@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`signup and login 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <h4
+    className="mv3"
+  >
+    Login
+  </h4>
+  <div
+    className="flex flex-column"
+  >
+    <input
+      name="email"
+      onChange={[Function]}
+      placeholder="Your email address"
+      type="text"
+      value=""
+    />
+    <input
+      name="password"
+      onChange={[Function]}
+      placeholder="Choose a safe password"
+      type="password"
+      value=""
+    />
+  </div>
+  <div
+    className="flex mt3"
+  >
+    <div
+      className="pointer mr2 button"
+      onClick={[Function]}
+    >
+      login
+    </div>
+    <div
+      className="pointer button"
+      onClick={[Function]}
+    >
+      need to create an account?
+    </div>
+  </div>
+</form>
+`;
+
+exports[`signup and login 2`] = `
+<form
+  onSubmit={[Function]}
+>
+  <h4
+    className="mv3"
+  >
+    Sign Up
+  </h4>
+  <div
+    className="flex flex-column"
+  >
+    <input
+      name="name"
+      onChange={[Function]}
+      placeholder="Your name"
+      type="text"
+      value=""
+    />
+    <input
+      name="email"
+      onChange={[Function]}
+      placeholder="Your email address"
+      type="text"
+      value=""
+    />
+    <input
+      name="password"
+      onChange={[Function]}
+      placeholder="Choose a safe password"
+      type="password"
+      value=""
+    />
+  </div>
+  <div
+    className="flex mt3"
+  >
+    <div
+      className="pointer mr2 button"
+      onClick={[Function]}
+    >
+      create account
+    </div>
+    <div
+      className="pointer button"
+      onClick={[Function]}
+    >
+      already have an account?
+    </div>
+  </div>
+</form>
+`;
