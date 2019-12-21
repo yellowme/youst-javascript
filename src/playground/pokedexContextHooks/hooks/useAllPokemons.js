@@ -3,26 +3,20 @@ import { useEffect } from "react";
 import api from "../api";
 
 import {
-  usePokemonState,
-  usePokemonDispatch,
+  usePokemonApi,
   FETCH_ALL_POKEMON_SUCCESS,
   FETCH_ALL_POKEMON_FAILURE,
   FETCH_ALL_POKEMON_REQUEST
 } from "../context/PokemonContext";
 
 export default function useAllPokemons() {
-  const state = usePokemonState();
-  const dispatch = usePokemonDispatch();
+  const [state, dispatch] = usePokemonApi();
 
   useEffect(() => {
     async function fetchPokemons() {
       try {
         dispatch({ type: FETCH_ALL_POKEMON_REQUEST });
-
-        const data =
-          state.data.allPokemons.length === 0
-            ? await api.allPokemons()
-            : state.data.allPokemons;
+        const data = await api.allPokemons();
 
         dispatch({
           type: FETCH_ALL_POKEMON_SUCCESS,
@@ -37,7 +31,7 @@ export default function useAllPokemons() {
     }
 
     fetchPokemons();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return state;

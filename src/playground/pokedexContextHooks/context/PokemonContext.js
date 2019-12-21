@@ -73,7 +73,7 @@ export default function PokemonProvider({ children }) {
   );
 }
 
-export function usePokemonState() {
+function usePokemonState() {
   const context = React.useContext(PokemonStateContext);
   if (context === undefined) {
     throw new Error("usePokemonState must be used within a PokemonProvider");
@@ -81,10 +81,14 @@ export function usePokemonState() {
   return context;
 }
 
-export function usePokemonDispatch() {
+function usePokemonDispatch() {
   const context = React.useContext(PokemonDispatchContext);
   if (context === undefined) {
     throw new Error("usePokemonDispatch must be used within a PokemonProvider");
   }
   return context;
+}
+
+export function usePokemonApi() {
+  return [usePokemonState(), usePokemonDispatch()];
 }
