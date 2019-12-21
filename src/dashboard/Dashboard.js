@@ -26,7 +26,7 @@ export default function Dashboard() {
           legend="Interview puzzlers"
         />
         <FeatureItem
-          to="/mini-apps/hacker-news"
+          to="/playground/pokedex-context-hooks"
           color={Colors.MINT_LEAF}
           title="Playground"
           legend="Proofs of concept"
