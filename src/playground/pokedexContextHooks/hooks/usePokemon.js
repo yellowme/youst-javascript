@@ -3,19 +3,17 @@ import { useEffect } from "react";
 import api from "../api";
 
 import {
-  usePokemonState,
-  usePokemonDispatch,
+  usePokemonApi,
   FETCH_POKEMON_SUCCESS,
   FETCH_POKEMON_FAILURE,
   FETCH_POKEMON_REQUEST
 } from "../context/PokemonContext";
 
 export default function usePokemon(id) {
-  const state = usePokemonState();
-  const dispatch = usePokemonDispatch();
+  const [state, dispatch] = usePokemonApi();
 
   useEffect(() => {
-    async function fetchPokemonById() {
+    async function fetchPokemonById(id) {
       try {
         dispatch({ type: FETCH_POKEMON_REQUEST });
         const data = await api.pokemon(id);
@@ -32,7 +30,7 @@ export default function usePokemon(id) {
       }
     }
 
-    fetchPokemonById();
+    fetchPokemonById(id);
   }, [dispatch, id]);
 
   return state;
