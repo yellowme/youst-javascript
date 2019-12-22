@@ -1,0 +1,20 @@
+.SuspenseLoader {
+  background-color: white;
+  animation-duration: 3s;
+  animation-name: fade;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fade {
+  0% {
+    background-color: white;
+  }
+
+  50% {
+    background-color: #ffd100;
+  }
+
+  100% {
+    background-color: white;
+  }
+}

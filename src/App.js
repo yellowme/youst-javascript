@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Dashboard from "./dashboard";
+import SuspenseLoader from "./core/components/SuspenseLoader";
 import FeatureHighlight from "./dashboard/components/FeatureHighlight";
 
 const LazyHackerNews = lazy(() => import("./miniApps/hackernews"));
@@ -11,7 +12,7 @@ const LazyPokedexContextHooks = lazy(() =>
 
 export default function App() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<SuspenseLoader />}>
       <Router>
         <Switch>
           <Route path="/" exact component={Dashboard} />
@@ -20,12 +21,11 @@ export default function App() {
             exact
             component={FeatureHighlight}
           />
-          <Route path="/mini-apps/hacker-news">
-            <LazyHackerNews />
-          </Route>
-          <Route path="/playground/pokedex-context-hooks">
-            <LazyPokedexContextHooks />
-          </Route>
+          <Route path="/mini-apps/hacker-news" component={LazyHackerNews} />
+          <Route
+            path="/playground/pokedex-context-hooks"
+            component={LazyPokedexContextHooks}
+          />
         </Switch>
       </Router>
     </Suspense>
