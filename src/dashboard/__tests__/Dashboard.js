@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 import { MemoryRouter } from "react-router-dom";
 
@@ -16,12 +15,6 @@ function TestDashboardComponent() {
   );
 }
 
-test("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<TestDashboardComponent />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
 test("display application titles", () => {
   const component = renderer.create(<TestDashboardComponent />);
   const title = component.root.findByType(Title);
@@ -33,24 +26,21 @@ test("display application titles", () => {
   );
 });
 
-test("dashboard have 3 main sections", () => {
+test("dashboard have 2 main sections", () => {
   // For now we use 3 "static" sections
-  // - Challenges
   // - Playgrounds
   // - Mini Apps
   // But the list component should work as a _Compound Component_
   const component = renderer.create(<TestDashboardComponent />);
 
   const featuresList = component.root.findByType(FeaturesList);
-  expect(featuresList.props.children.length).toBe(3);
+  expect(featuresList.props.children.length).toBe(2);
 
   const [
-    featureChallenges,
     featurePlaygrounds,
     featureMiniApps
   ] = featuresList.props.children;
 
-  expect(featureChallenges.props.title).toBe("Challenges");
   expect(featurePlaygrounds.props.title).toBe("Playground");
   expect(featureMiniApps.props.title).toBe("Mini Apps");
 });
