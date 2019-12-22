@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { MINI_APP_BASE_ROUTE } from "../constants";
-import PokemonSprite from "./PokemonSprite";
+import PokemonSpeciesSprite from "./PokemonSpeciesSprite";
 
-export default function Pokemon({ id, name, to }) {
+export default function PokemonSpecies({ id, name }) {
   return (
     <div className="pokemon--species">
       <Link to={`${MINI_APP_BASE_ROUTE}/${id}`}>
         <div className="pokemon--species--container">
-          <PokemonSprite
+          <PokemonSpeciesSprite
             alt={name}
             src={`${process.env.PUBLIC_URL}/playground/pokedexContextHooks/sprites/${id}.png`}
           />

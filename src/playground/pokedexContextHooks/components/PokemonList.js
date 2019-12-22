@@ -1,29 +1,31 @@
 import React from "react";
 
-import Pokemon from "./Pokemon";
+import PokemonSpecies from "./PokemonSpecies";
+import PokemonSpeciesList from "./PokemonSpeciesList";
 import useAllPokemons from "../hooks/useAllPokemons";
 import useLozad from "../../../core/hooks/useLozad";
 
 export default function PokemonList() {
+  // Lazy load images with LazyImage
   useLozad();
   const { data, error, loading } = useAllPokemons();
 
-  if (loading) return "Loading...";
-  if (error) return "Error!";
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error!</div>;
 
   return (
     <div className="pokeapp">
       <p> The Kanto PokeDex! </p>
-      <div className="pokemon--species--list">
+      <PokemonSpeciesList>
         {data.allPokemons.map((pokemon, id) => (
-          <Pokemon
+          <PokemonSpecies
             to={pokemon.url}
             key={pokemon.name}
             id={id + 1}
             name={pokemon.name}
           />
         ))}
-      </div>
+      </PokemonSpeciesList>
     </div>
   );
 }
