@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { MINI_APP_BASE_ROUTE } from "../constants";
 import useAuthenticatedUser from "../hooks/useAuthenticatedUser";
+import Link from '../../../core/components/Link';
 
 export default function Header() {
   const history = useHistory();

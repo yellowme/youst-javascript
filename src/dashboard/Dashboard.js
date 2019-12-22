@@ -20,19 +20,13 @@ export default function Dashboard() {
       </Subtitle>
       <FeaturesList>
         <FeatureItem
-          to="/mini-apps/hacker-news"
-          color={Colors.PINK_GLAMOUR}
-          title="Challenges"
-          legend="Interview puzzlers"
-        />
-        <FeatureItem
-          to="/playground/pokedex-context-hooks"
+          to="/playground"
           color={Colors.MINT_LEAF}
           title="Playground"
           legend="Proofs of concept"
         />
         <FeatureItem
-          to="/mini-apps/hacker-news"
+          to="/mini-apps"
           color={Colors.JOUST_BLUE}
           title="Mini Apps"
           legend="Let's clone that app"

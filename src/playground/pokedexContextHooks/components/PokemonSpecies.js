@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import { MINI_APP_BASE_ROUTE } from "../constants";
 import PokemonSpeciesSprite from "./PokemonSpeciesSprite";
+import Link from '../../../core/components/Link'
 
 export default function PokemonSpecies({ id, name }) {
   return (

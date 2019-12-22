@@ -1,0 +1,19 @@
+.FeaturesViewPager {
+  display: grid;
+  grid-template-rows: repeat(1, minmax(8rem, 300px));
+  grid-auto-columns: 300px;
+  gap: 8px;
+}
+
+.FeaturesViewPager > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.FeaturesViewPager::before {
+  content: "";
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}

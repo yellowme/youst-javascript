@@ -8,7 +8,7 @@ import createList from "../../../../jest/createList";
 import createPokemon from "../../jest/factories/pokemon";
 import PokemonList from "../PokemonList";
 import PokemonSpecies from "../PokemonSpecies";
-import { MINI_APP_BASE_ROUTE, POKEMONS_PER_PAGE } from "../../constants";
+import { MINI_APP_BASE_ROUTE } from "../../constants";
 
 function TestPokemonList({ mocks = [] }) {
   return (
