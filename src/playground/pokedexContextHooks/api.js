@@ -1,5 +1,5 @@
 async function apiClient({ path = "/", method = "GET", body }) {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon${path}`, {
+  const response = await fetch(`${process.env.REACT_APP_PLAYGROUND_POKEDEX_API}${path}`, {
     method: method,
     ...(body ? { body: JSON.stringify(body) } : {}),
     headers: {
