@@ -93,7 +93,7 @@ test("creates a new link with createLink mutation", async () => {
   });
 
   await renderer.act(async () => {
-    await wait(0); // Wait to LinkList query resolves
+    await wait(1000); // Wait to LinkList query resolves
   });
 
   const links = component.root.findAllByType(Link);
