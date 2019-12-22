@@ -56,7 +56,7 @@ function pokemonReducer(state, action) {
 }
 
 const initialState = {
-  loading: false,
+  loading: true,
   error: null,
   data: { allPokemons: [], pokemon: { sprites: [] } }
 };

@@ -1,14 +1,10 @@
 @import "../../styles/poppins.css";
 
-html,
-body {
+.pokeapp {
+  padding: 16px;
   font-family: sans-serif;
   background: #e2e1e0;
   text-align: center;
-}
-
-.pokeapp {
-  padding: 16px;
 }
 
 .pokemon--species--list {

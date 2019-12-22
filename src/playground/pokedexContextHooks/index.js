@@ -1,4 +1,4 @@
-import "./index.css";
+import "./Pokedex.css";
 
 import Pokedex from "./Pokedex";
 
