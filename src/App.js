@@ -1,12 +1,13 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import prerenderedLazy from "./prerenderedLazy";
 
 import Dashboard from "./dashboard";
 import SuspenseLoader from "./core/components/SuspenseLoader";
 import FeatureHighlight from "./dashboard/components/FeatureHighlight";
 
-const LazyHackerNews = lazy(() => import("./miniApps/hackernews"));
-const LazyPokedexContextHooks = lazy(() =>
+const LazyHackerNews = prerenderedLazy(() => import("./miniApps/hackernews"));
+const LazyPokedexContextHooks = prerenderedLazy(() =>
   import("./playground/pokedexContextHooks")
 );
 
